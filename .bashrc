@@ -19,6 +19,3 @@ bind "set show-all-if-ambiguous On" # show list automatically, without double ta
 if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
 fi
-
-#git completion
-source $HOME/.git-completion.bash

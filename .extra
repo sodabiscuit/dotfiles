@@ -1,0 +1,7 @@
+#git completion
+source $HOME/.git-completion.bash
+
+#python environment
+
+#virtualenvwrapper
+source /usr/local/bin/virtualenvwrapper.sh
