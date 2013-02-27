@@ -1,8 +1,7 @@
-dotfiles
-========
+#dotfiles
 
 My Dotfiles for *nix
 
-Usage:
+##Usage:
 
 * ``source ./.bashrc``
