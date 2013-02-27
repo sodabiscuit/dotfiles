@@ -1,7 +1,16 @@
+# Set user custom binary
+export PATH="$HOME/bin:$PATH"
+
+# Set Locale
+#export LC_ALL="en_US.UTF-8"
+#export LANG="en_US"
+
 # Make vim the default editor
 export EDITOR="vim"
+
 # Don’t clear the screen after quitting a manual page
 export MANPAGER="less -X"
+
 # Highlight section titles in manual pages
 export LESS_TERMCAP_md="$ORANGE"
 
@@ -9,27 +18,6 @@ export LESS_TERMCAP_md="$ORANGE"
 export HISTSIZE=32768
 export HISTFILESIZE=$HISTSIZE
 export HISTCONTROL=ignoredups
+
 # Make some commands not show up in history
 export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
-
-#export PATH=$PATH:~/Scripts
-#rvm
-#source /Users/sodabiscuit/.rvm/scripts/rvm
-#golang
-#export GOROOT=$HOME/CodeLib/google/go
-#export GOARCH=386
-#export GOOS=darwin
-#export PATH=$PATH:$GOROOT/bin
-#node
-#export NODE_PATH=/opt/node:/opt/node/lib/node_modules
-#export PATH=$PATH:/opt/node/bin
-#nacl
-export NACL_SDK_ROOT=$HOME/Dev/nacl_sdk
-#python
-#export PYTHONPATH=$HOME/CodeLib/tornado:$PYTHONPATH
-#export PYTHONPATH=$HOME/CodeLib/google/google-api-python-client:$PYTHONPATH
-#mongodb
-#export MONGO_PATH=$HOME/Dev/mongodb
-#export PATH=$PATH:$MONGO_PATH/bin
-#mit-scheme
-export PATH=$PATH:/Applications/mit-scheme.app/Contents/Resources/
