@@ -21,3 +21,6 @@ export HISTCONTROL=ignoredups
 
 # Make some commands not show up in history
 export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help"
+
+# For python modules
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib
