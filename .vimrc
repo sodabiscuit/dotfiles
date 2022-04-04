@@ -4,7 +4,7 @@
 "set pythonthreehome=/opt/homebrew/Cellar/python@3.9/3.9.9
 
 "nvim@env {{{
-let g:python3_host_prog=expand('~/.pyenv/versions/3.9.10/bin/python3')
+"let g:python3_host_prog=expand('~/.pyenv/versions/3.9.10/bin/python3')
 if !has('nvim') " Vim 8 only
   pythonx import pynvim
   "pythonx import neovim
