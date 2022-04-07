@@ -1,9 +1,6 @@
-" @author soda(sodabiscuit@gmail.com) {{{
-
-"set pythonthreedll=/usr/local/Frameworks/Python.framework/Versions/3.9/Python
-"set pythonthreehome=/opt/homebrew/Cellar/python@3.9/3.9.9
-
-"nvim@env {{{
+" @author Yulin Ding(sodabiscuit@gmail.com) {{{
+" General {{{
+"nvim@general {{{
 if !empty($PYTHON_HOST_PROG)
     let g:python_host_prog  = $PYTHON_HOST_PROG
 endif
@@ -12,9 +9,17 @@ if !empty($PYTHON3_HOST_PROG)
 endif
 if !has('nvim') " Vim 8 only
   pythonx import pynvim
-  "pythonx import neovim
 endif
 " }}} 
+"beep off@general {{{
+if has("unix") && !has("gui_running")
+    set noerrorbells
+    set visualbell
+    set t_vb=
+endif
+" }}}
+" }}} General
+" Plugins {{{
 "vim-plug@plugins {{{
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -23,7 +28,6 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-"call plug#begin(has('nvim') ? stdpath('data') . '/plugged' : '~/.vim/plugged')
 
 " Install vim-plug if not found
 if empty(glob('~/.vim/autoload/plug.vim'))
@@ -67,15 +71,31 @@ Plug 'yegappan/mru'
 
 call plug#end()
 " }}} 
+"deoplete@plugins {{{
+let g:deoplete#enable_at_startup = 1
+" }}} 
 "NERDTree@plugins {{{
 let NERDTreeWinSize = 25
 let NERTChristmasTree = 1
 let NERDTreeShowBookmarks = 1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
-    \ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
+let NERDTreeIgnore=['\.pyc$', '\~$']
+autocmd StdinReadPre * let s:std_in=1
+" Start NERDTree when Vim starts with a directory argument.
+"autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists('s:std_in') |
+    "\ execute 'NERDTree' argv()[0] | wincmd p | enew | execute 'cd '.argv()[0] | endif
+
+" Start NERDTree. If a file is specified, move the cursor to its window.
+"autocmd VimEnter * NERDTree | if argc() > 0 || exists("s:std_in") | wincmd p | endif
+
+" Open the existing NERDTree on each new tab.
 "autocmd BufWinEnter * if getcmdwintype() == '' | silent NERDTreeMirror | endif
-autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() |
-    \ quit | endif
+
+" Exit Vim if NERDTree is the only window remaining in the only tab.
+"autocmd BufEnter * if tabpagenr('$') == 1 && winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
+" Close the tab if NERDTree is the only window remaining in it.
+"autocmd BufEnter * if winnr('$') == 1 && exists('b:NERDTree') && b:NERDTree.isTabTree() | quit | endif
+
 let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ 'Modified'  :'✹',
                 \ 'Staged'    :'✚',
@@ -97,14 +117,9 @@ let g:ctrlp_cmd = 'CtrlP'
 "MarkdownPreview@plugins {{{
 let g:mkdp_command_for_global = 1
 " }}}
-"beep off@audio {{{
-if has("unix") && !has("gui_running")
-    set noerrorbells
-    set visualbell
-    set t_vb=
-endif
-" }}}
-"normal@view  {{{
+" }}} Plugins
+" Appearance {{{
+"general@appearance  {{{
 if has("gui_running")
 set guioptions-=T
 set guioptions-=e
@@ -122,7 +137,7 @@ map <silent> <F2> :if &guioptions =~# 'T' <Bar>
     \endif<CR> 
 endif
 " }}}
-"window@view {{{
+"fullscreen@appearance {{{
 function! MaximizeWindow()
     silent !wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
 endfunction
@@ -137,13 +152,13 @@ elseif has("gui_gtk2")
     au GUIEnter * call MaximizeWindow()
 endif
 " }}}
-"tabline@view {{{
+"tabline@appearance {{{
 "set guitablabel=%{tabpagenr()}.%t\ %m
 set guitablabel=%t
 set showtabline=2
 "let g:tablineclosebutton=1
 " }}}
-"statusline@view {{{
+"statusline@appearance {{{
 set laststatus=2
 set statusline=
 set statusline+=%<[%n]
@@ -155,9 +170,24 @@ set statusline+=[%{&ff}]
 set statusline+=[ASCII=\%03.3b]
 set statusline+=\ %-10.(%l,%c%V%)
 set statusline+=\ %P
-""set statusline=%<[%n]\ %F\ %h%m%r%=%k[%{strlen(&ft)?&ft:'none'}][%{(&fenc==\"\")?&enc:&fenc}%{(&bomb?\",BOM\":\"\")}][%{&ff}][ASCII=\%03.3b]\ %-10.(%l,%c%V%)\ %P
-""set statusline=%t%r%h%w\ [%Y]\ [%{&ff}]\ [%{&fenc}:%{&enc}]\ [%08.8L]\ [%p%%-%P]\ [%05.5b]\ [%04.4B]\ [%08.8l]%<\ [%04.4c-%04.4v%04.4V]
 " }}}
+"themes@appearance {{{
+if has('termguicolors')
+    set termguicolors
+endif
+set background=dark
+colorscheme vim-material
+let g:material_style='palenight'
+" }}} 
+"theme custom@appearance {{{
+"hi TabLine      guifg=NONE guibg=#455A64 gui=none ctermfg=254 ctermbg=238 cterm=none
+"hi TabLineSel   guifg=NONE guibg=#263238 gui=bold ctermfg=231 ctermbg=235 cterm=bold
+"hi TabLineFill  guifg=NONE guibg=#455A64 gui=none ctermfg=254 ctermbg=238 cterm=none
+hi VertSplit     guifg=NONE guibg=#263238 gui=none
+set fillchars-=vert:\| | set fillchars+=vert:\ 
+" }}} 
+" }}} Appearance
+" Key maps  {{{
 "mouse click disabled@keymaps {{{
 map <MiddleMouse> <Nop>
 map <2-MiddleMouse> <Nop>
@@ -208,33 +238,32 @@ if has('mouse')
 endif
 " }}}
 "NERDTree@keymaps {{{
-" nmap <silent> <leader>nt :NERDTree<cr>
-" nmap <silent> <leader>ntc :NERDTreeClose<cr>
-" nmap <silent> <leader>nt :NERDTreeToggle<cr>
-" nmap <silent> <C-P>:NERDTreeToggle<cr>
 nnoremap <silent> <leader>f :NERDTreeToggle<cr>
 " }}}
+" }}} Key map
+" Editor {{{
 "display@editor {{{
 set autochdir
 set nocompatible
 set langmenu=none
 " language messages none
-set wrap
-set nolinebreak
+
 set wildmenu
 set ruler
 set number
 set numberwidth=4
-set equalalways
+" set columns=195
+" set lines=44
+set wrap
+set whichwrap=b,s,<,>,[,] "auto jump next line
 set nowrap
+set nolinebreak
+set equalalways
 "set softtabstop=4
 set tabstop=4
 set shiftwidth=4
 set expandtab
 set linespace=4
-" set columns=195
-" set lines=44
-set whichwrap=b,s,<,>,[,] "auto jump next line
 set backspace=indent,eol,start
 set fdm=marker
 " }}}
@@ -277,14 +306,14 @@ endif
 " }}}
 "cursor@editor {{{
 if has("gui_macvim")
-nmap <S-A-F11> :set cursorline!<BAR>set nocursorline?<CR>
-nmap <S-A-F12> :set cursorcolumn!<BAR>set nocursorcolumn?<CR>
+    nmap <S-A-F11> :set cursorline!<BAR>set nocursorline?<CR>
+    nmap <S-A-F12> :set cursorcolumn!<BAR>set nocursorcolumn?<CR>
 else
-nmap <S-F11> :set cursorline!<BAR>set nocursorline?<CR>
-nmap <S-F12> :set cursorcolumn!<BAR>set nocursorcolumn?<CR>
+    nmap <S-F11> :set cursorline!<BAR>set nocursorline?<CR>
+    nmap <S-F12> :set cursorcolumn!<BAR>set nocursorcolumn?<CR>
 endif
 " }}}
-"storage_session@file {{{
+"storage_session@editor {{{
 set history=100
 set nobackup
 set nowritebackup
@@ -292,30 +321,9 @@ set noswapfile
 set backupext=.bak
 set bufhidden=hide
 " }}}
-"search@file {{{
+"search@editor {{{
 set incsearch
 set hlsearch
 " }}} 
-"deoplete@editor {{{
-let g:deoplete#enable_at_startup = 1
-" }}} 
-"themes@editor {{{
-if has('termguicolors')
-  set termguicolors
-endif
-set background=dark
-" set background=light
-colorscheme vim-material
-let g:material_style='palenight'
-" let g:material_style='oceanic'
-" colorscheme one
-" }}} 
-"global theme overrides@editor {{{
-hi TabLine      guifg=NONE guibg=#455A64 gui=none
-hi TabLineSel   guifg=NONE guibg=#263238 gui=bold
-hi TabLineFill  guifg=NONE guibg=#455A64 gui=none
-"hi TabLine      ctermfg=254 ctermbg=238 cterm=none
-"hi TabLineSel   ctermfg=231 ctermbg=235 cterm=bold
-"hi TabLineFill  ctermfg=254 ctermbg=238 cterm=none
-" }}} 
+" }}} Editor
 " }}}
