@@ -7,9 +7,9 @@ endif
 if !empty($PYTHON3_HOST_PROG)
     let g:python3_host_prog = $PYTHON3_HOST_PROG
 endif
-if !has('nvim') " Vim 8 only
-  pythonx import pynvim
-endif
+"if !has('nvim') 
+  "pythonx import pynvim
+"endif
 " }}} 
 "beep off@general {{{
 if has("unix") && !has("gui_running")
@@ -153,9 +153,11 @@ elseif has("gui_gtk2")
 endif
 " }}}
 "tabline@appearance {{{
+if has("gui_running")
 "set guitablabel=%{tabpagenr()}.%t\ %m
 set guitablabel=%t
 set showtabline=2
+endif
 "let g:tablineclosebutton=1
 " }}}
 "statusline@appearance {{{
@@ -276,7 +278,7 @@ filetype indent on
 set encoding=utf-8
 set fileencodings=utf-8,ucs-bom,gb18030,gbk,gb2312,cp936
 set fileencoding=utf-8
-let &termencoding=&encoding
+"let &termencoding=&encoding
 if has("gui_running")
     source $VIMRUNTIME/delmenu.vim
     source $VIMRUNTIME/menu.vim
